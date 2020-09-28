@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.jmu.dao.NeteaseUnitDao">
+    <select id="getNetcaseAccount" resultType="cn.edu.jmu.pojo.NetcaseUnit" parameterType="java.lang.String">SELECT  id, name, parent_id parentId, netease_id neteaseId, synced, updated, last_updated lastUpdated, error  FROM t_netease_unit START WITH ID = #{unitId} CONNECT BY PRIOR parent_id = ID</select>
+</mapper>

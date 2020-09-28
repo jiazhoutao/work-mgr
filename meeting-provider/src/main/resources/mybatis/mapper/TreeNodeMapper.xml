@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.jmu.dao.TreeNodeDao">
+	<select id="findAll" resultType="cn.edu.jmu.pojo.TreeNode">select tree.ID `key`,tree.`NAME` title,tree.PARENT_ID pid,tree.ORG_PROPERTY_ID orgPropertyId, tree.SEQUENCE_NO sequence,tree.STAFF_ID from (SELECT	t.ID,t.NAME ,t.PARENT_ID,t.SEQUENCE_NO,t.ORG_PROPERTY_ID,'' STAFF_ID FROM	t_organization t 	UNION ALL (SELECT	t.ID,	s.NAME,	t.ORG_ID PARENT_ID,	t.SEQUENCE_NO,	'4' ORG_PROPERTY_ID,	t.STAFF_ID FROM	t_person_staff t,	t_staff s WHERE	t.STAFF_ID = s.ID)) tree ORDER BY tree.PARENT_ID;</select>
+</mapper>
+
+

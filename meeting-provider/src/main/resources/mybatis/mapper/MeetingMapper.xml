@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.jmu.dao.MeetingDao">
+    <select id="getAllMeeting" resultType="cn.edu.jmu.pojo.Meeting">SELECT t_meeting.id,t_meeting.`name`,t_meeting.detail,t_meeting.begin_time AS beginTime,t_meeting.end_time AS endTime,t_meeting.type,t_meeting.holder,t_meeting.creator,t_meeting.over_func_setting AS overFuncSetting,t_meeting.exec_time_before_over AS execTimeBeforeOver,t_meeting.over_time AS overTime FROM t_meeting ORDER BY beginTime DESC</select>
+    <select id="getMeeting" resultType="cn.edu.jmu.pojo.Meeting" parameterType="java.lang.String">SELECT t_meeting.id,t_meeting.`name`,t_meeting.detail,t_meeting.begin_time AS beginTime,t_meeting.end_time AS endTime,t_meeting.type,t_meeting.holder,t_meeting.creator,t_meeting.over_func_setting AS overFuncSetting,t_meeting.exec_time_before_over AS execTimeBeforeOver,t_meeting.over_time AS overTime FROM t_meeting WHERE t_meeting.id=#{id}</select>
+    <insert id="addMeeting" parameterType="cn.edu.jmu.pojo.Meeting" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO t_meeting(`name`) VALUES (#name)
+    </insert>
+</mapper>

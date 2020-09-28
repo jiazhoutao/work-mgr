@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.jmu.dao.NeteaseAccountDao">
+    <select id="getNetcaseAccount" resultType="cn.edu.jmu.pojo.NeteaseAccount" parameterType="java.lang.String">select account_name accountName,addr_right addrRight,addr_visible addrVisible,exp_time extTime,fwd,fwdauth,job_no jobNo,mobile,nickname,pass_type passType,passchange_req passchangeRreq,password,resetpass_mobile resetpassMobile,resetpass_general resetpassGeneral,unit_id unitId,is_new isNew,need_change_info needChangeInfo,need_change_unit needChangeUnit,need_change_password needChangePassword,creaded,synced,enabled,error,updated,last_updated lastUpdate from t_netease_account_customer where account_name = #{id}</select>
+</mapper>
