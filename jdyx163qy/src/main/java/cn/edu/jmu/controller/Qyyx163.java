@@ -169,7 +169,8 @@ public class Qyyx163 {
 
         List<NetcaseUnit>  list= neteaseService.getNetcaseUnitListByLeafId(unitId);
 
-        for(NetcaseUnit netcaseUnit:list){
+        for(int i=list.size()-1;i>=0;i--){
+            NetcaseUnit netcaseUnit=list.get(i);
             String neteaseId=netcaseUnit.getNeteaseId();
             System.out.println("neteaseId："+neteaseId);
         }
