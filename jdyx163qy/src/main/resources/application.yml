@@ -6,7 +6,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
     driver-class-name: oracle.jdbc.driver.OracleDriver              # mysql驱动包
-    url: jdbc:oracle:thin:@10.8.1.53:1521/ywkdb              # 数据库名称
+    url: jdbc:oracle:thin:@210.34.130.84:1521/ywkdb              # 数据库名称
     username: usr_163
     password: jmu_mail163
     dbcp2:

@@ -173,6 +173,9 @@ public class Qyyx163 {
             NetcaseUnit netcaseUnit=list.get(i);
             String neteaseId=netcaseUnit.getNeteaseId();
             System.out.println("neteaseId："+neteaseId);
+            if(neteaseId==null||neteaseId.length()==0){
+                neteaseService.addUnit(netcaseUnit);
+            }
         }
 
 
