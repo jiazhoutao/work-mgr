@@ -45,7 +45,7 @@ public class Qyyx163 {
     }
 
     @PutMapping(value = "/jdyx/account/password")
-    public String updatePassWord(HttpServletRequest request,String password) throws UnsupportedEncodingException {
+    public String updatePassWord(HttpServletRequest request, String password) throws UnsupportedEncodingException {
         return neteaseService.updatePassWord(request,password);
     }
 }

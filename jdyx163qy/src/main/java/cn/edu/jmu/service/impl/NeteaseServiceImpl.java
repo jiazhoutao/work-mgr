@@ -3,6 +3,7 @@ package cn.edu.jmu.service.impl;
 import cn.edu.jmu.dao.NeteaseAccountDao;
 import cn.edu.jmu.dao.NeteaseUnitDao;
 import cn.edu.jmu.pojo.NetcaseUnit;
+import cn.edu.jmu.pojo.NetcaseUnitLog;
 import cn.edu.jmu.pojo.NeteaseAccount;
 import cn.edu.jmu.service.NeteaseService;
 import cn.edu.jmu.util.RSASignatureToQiye;
@@ -15,17 +16,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpUtils;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class NeteaseServiceImpl implements NeteaseService {
@@ -38,6 +38,9 @@ public class NeteaseServiceImpl implements NeteaseService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+   private String DOMAIN="jmu.edu.cn";
+   private String PRODUCTOR="test_jmu_edu_cn";
 
     @Override
     public NeteaseAccount getNetcaseAccount(String curUser) {
@@ -70,10 +73,10 @@ public class NeteaseServiceImpl implements NeteaseService {
         if(curUser==null||curUser.length()==0){
             return "{'con': null, 'suc': false, 'ver': null, error: 'curUser is null'}";
         }
-        String domain = getDomain(jsonObject);
+//        String domain = getDomain(jsonObject);
         String currentTimeStamps = System.currentTimeMillis()+"";
-        String sign = "account_name="+curUser+"&domain="+domain+"&product=test_jmu_edu_cn&time="+currentTimeStamps;
-        String urlParams = "account_name="+curUser+"&domain="+domain+"&product=test_jmu_edu_cn&time="+currentTimeStamps;
+        String sign = "account_name="+curUser+"&domain="+this.DOMAIN+"&product="+PRODUCTOR+"&time="+currentTimeStamps;
+        String urlParams = "account_name="+curUser+"&domain="+this.DOMAIN+"&product="+PRODUCTOR+"&time="+currentTimeStamps;
         System.out.println(sign);
         sign = RSASignatureToQiye.generateSigature(PRI_KEY, sign);
         System.out.println(sign);
@@ -96,10 +99,10 @@ public class NeteaseServiceImpl implements NeteaseService {
         if(curUser==null||curUser.length()==0){
             return "{'con': null, 'suc': false, 'ver': null, error: 'curUser is null'}";
         }
-        String domain = getDomain(jsonObject);
+//        String domain = getDomain(jsonObject);
         String currentTimeStamps = System.currentTimeMillis()+"";
-        String sign = "account_name="+curUser+"&domain="+domain+"&product=test_jmu_edu_cn&time="+currentTimeStamps;
-        String urlParams = "account_name="+curUser+"&domain="+domain+"&product=test_jmu_edu_cn&time="+currentTimeStamps;
+        String sign = "account_name="+curUser+"&domain="+this.DOMAIN+"&product="+PRODUCTOR+"&time="+currentTimeStamps;
+        String urlParams = "account_name="+curUser+"&domain="+this.DOMAIN+"&product="+PRODUCTOR+"&time="+currentTimeStamps;
         System.out.println(sign);
         sign = RSASignatureToQiye.generateSigature(PRI_KEY, sign);
         System.out.println(sign);
@@ -109,21 +112,21 @@ public class NeteaseServiceImpl implements NeteaseService {
         return obj.getBody();
     }
 
-    private String getDomain(JSONObject jsonObject) {
-        String domain="jmu.edu.cn";
-        try {
-            String[] groups=(String[]) jsonObject.get("group");
-            if (-1!= Arrays.binarySearch(groups,"BZKS")){
-                domain="jmu.edu.cn";
-            };
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return domain;
-    }
+//    private String getDomain(JSONObject jsonObject) {
+//        String domain="jmu.edu.cn";
+//        try {
+//            String[] groups=(String[]) jsonObject.get("group");
+//            if (-1!= Arrays.binarySearch(groups,"BZKS")){
+//                domain="jmu.edu.cn";
+//            };
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return domain;
+//    }
 
     @Override
-    public String updateAccount(HttpServletRequest request,String mobile) throws UnsupportedEncodingException {
+    public String updateAccount(HttpServletRequest request,String mobile)  {
         String currentTimeStamps = System.currentTimeMillis()+"";
         JSONObject jsonObject = getUserNameAndGroup(request);
         String curUser= null;
@@ -135,14 +138,13 @@ public class NeteaseServiceImpl implements NeteaseService {
         if(curUser==null||curUser.length()==0){
             return "{'con': null, 'suc': false, 'ver': null, error: 'curUser is null'}";
         }
-        String domain = getDomain(jsonObject);
+//        String domain = getDomain(jsonObject);
 
         String urlParams ="account_name="+curUser
-                +"&domain="+domain +
+                +"&domain="+this.DOMAIN +
                 "&mobile="+mobile+"" +
-                "&product=test_jmu_edu_cn" +
-                "&time="+currentTimeStamps+"" +
-                "&unit_id=default";
+                "&product="+PRODUCTOR+"" +
+                "&time="+currentTimeStamps;
         String sign = RSASignatureToQiye.generateSigature(PRI_KEY, urlParams);
         System.out.println(sign);
         urlParams+="&sign="+sign;
@@ -151,7 +153,7 @@ public class NeteaseServiceImpl implements NeteaseService {
         return obj.getBody();
     }
     @Override
-    public String updatePassWord(HttpServletRequest request,String password) throws UnsupportedEncodingException {
+    public String updatePassWord(HttpServletRequest request,String password) {
         String currentTimeStamps = System.currentTimeMillis()+"";
         JSONObject jsonObject = getUserNameAndGroup(request);
         String curUser= null;
@@ -163,14 +165,13 @@ public class NeteaseServiceImpl implements NeteaseService {
         if(curUser==null||curUser.length()==0){
             return "{'con': null, 'suc': false, 'ver': null, error: 'curUser is null'}";
         }
-        String domain = getDomain(jsonObject);
 
         String urlParams ="account_name="+curUser
-                +"&domain="+domain +
+                +"&domain="+this.DOMAIN +
                 "&pass_type=1" +
                 "&passchange_req=0" +
                 "&password="+password+"" +
-                "&product=test_jmu_edu_cn" +
+                "&product="+PRODUCTOR+"" +
                 "&time="+currentTimeStamps;
         String sign = RSASignatureToQiye.generateSigature(PRI_KEY, urlParams);
         System.out.println(sign);
@@ -230,13 +231,68 @@ public class NeteaseServiceImpl implements NeteaseService {
         return netcaseUnitDao.getNetcaseUnitListByLeafId(unitId);
     }
 
-    @Override
-    public void addUnit(NetcaseUnit netcaseUnit) {
+    private void addUnit(NetcaseUnit netcaseUnit,NetcaseUnit parentNetUnit)  {
+        UUID uuid = UUID.randomUUID();
+        NetcaseUnitLog netcaseUnitLog=new NetcaseUnitLog();
+        netcaseUnitLog.setWid(uuid.toString());
+        String unit_name=netcaseUnit.getName();
+        String id=netcaseUnit.getId();
+        try {
 
+        String urlParams="domain="+DOMAIN;
+        if(parentNetUnit!=null){
+            String parent_id=parentNetUnit.getNeteaseId();
+            urlParams+="&parent_id="+parent_id;
+        }
+        urlParams+="&product="+PRODUCTOR+"&unit_name="+unit_name;
+        String sign = RSASignatureToQiye.generateSigature(PRI_KEY, urlParams);
+        urlParams+="&sign="+sign;
+        ResponseEntity<String> obj= restTemplate.postForEntity(QYYX_URL+"/unit/createUnit?"+urlParams, null, String.class);
+        String responseBody=obj.getBody();
+        JSONObject jsonObject=new JSONObject();
+
+            jsonObject=jsonObject.getJSONObject(responseBody);
+
+        Boolean suc=jsonObject.getBoolean("suc");
+
+
+        if(suc){
+            JSONObject con=jsonObject.getJSONObject("con");
+            String unit_id=con.getString("unit_id");
+            netcaseUnitDao.updateUnitIdById(unit_id,id);
+            netcaseUnitLog.setOperate("createUnit");
+            netcaseUnitLog.setOperated(new Date());
+            netcaseUnitLog.setUnit_id(id);
+            netcaseUnitLog.setUser_id("netcase_user");
+            netcaseUnitLog.setUnit_name(unit_name);
+        }else{
+            String error_code=jsonObject.getString("error_code");
+            netcaseUnitLog.setOperate("createUnit");
+            netcaseUnitLog.setUnit_id(id);
+            netcaseUnitLog.setOperated(new Date());
+            netcaseUnitLog.setUser_id("netcase_user");
+            netcaseUnitLog.setUnit_name(unit_name);
+            netcaseUnitLog.setError(error_code);
+            netcaseUnitLog.setWid(uuid.toString());
+        }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            netcaseUnitLog.setOperated(new Date());
+            netcaseUnitLog.setOperate("createUnit");
+            netcaseUnitLog.setUnit_id(id);
+            netcaseUnitLog.setOperated(new Date());
+            netcaseUnitLog.setUser_id("netcase_user");
+            netcaseUnitLog.setUnit_name(unit_name);
+            netcaseUnitLog.setError(e.getMessage());
+            netcaseUnitLog.setWid(uuid.toString());
+
+        }
+        netcaseUnitDao.insertNetcaseUnitLog(netcaseUnitLog);
     }
 
 
-    public String createAccount(HttpServletRequest request,String mobile,String password) throws UnsupportedEncodingException {
+    public String createAccount(HttpServletRequest request,String mobile,String password) {
         JSONObject jsonObject = getUserNameAndGroup(request);
         String curUser= null;
         try {
@@ -247,46 +303,53 @@ public class NeteaseServiceImpl implements NeteaseService {
         if(curUser==null||curUser.length()==0){
             return "{'con': null, 'suc': false, 'ver': null, error: 'curUser is null'}";
         }
-        String domain = getDomain(jsonObject);
+//        String domain = getDomain(jsonObject);
         NeteaseAccount neteaseAccount= getNetcaseAccount(curUser);
         String unitId = neteaseAccount.getUnitId();
         String currentTimeStamps = System.currentTimeMillis()+"";
 
-        List<NetcaseUnit>  list= getNetcaseUnitListByLeafId(unitId);
+        List<NetcaseUnit> list= getNetcaseUnitListByLeafId(unitId);
 
         for(int i=list.size()-1;i>=0;i--){
             NetcaseUnit netcaseUnit=list.get(i);
+            NetcaseUnit parentNetcaseUnit=null;
+            if(i>=1){
+                parentNetcaseUnit=list.get(i-1);
+            }
+
             String neteaseId=netcaseUnit.getNeteaseId();
             System.out.println("neteaseId："+neteaseId);
             if(neteaseId==null||neteaseId.length()==0){
-                addUnit(netcaseUnit);
+                addUnit(netcaseUnit,parentNetcaseUnit);
             }
+        }
+        NetcaseUnit netcaseUnit=list.get(0);
+        String neteaseId=netcaseUnit.getNeteaseId();
+        if(neteaseId==null){
+            return "{'con': null, 'suc': false, 'ver': null, error: 'netcaseUnit is null'}";
+        }else{
+            String urlParams =
+                 "account_name="+curUser
+                +"&domain=" +DOMAIN
+                +"&mobile="+mobile
+                + "&job_no="+curUser+
+                "&nickname="+curUser+
+                "&pass_type=1" +
+                "&passchange_req=1" +
+                "&password="+password+"" +
+                "&product=" +PRODUCTOR+
+                "&time="+currentTimeStamps+"" +
+                "&unit_id="+neteaseId;
+        String sign = RSASignatureToQiye.generateSigature(PRI_KEY, urlParams);
+        System.out.println(sign);
+        urlParams+="&sign="+sign;
+        ResponseEntity<String> obj= restTemplate.postForEntity(QYYX_URL+"/account/createAccount?"+urlParams, null, String.class);
+        System.out.println(obj);
+        return obj.getBody();
         }
 
 
 
-
-
-
-
-
-//        String urlParams =
-//                 "account_name="+curUser
-//                +"&domain=" +domain
-//                +"&mobile="+mobile+"" +
-//                "&nickname="+curUser+"" +
-//                "&pass_type=1" +
-//                "&passchange_req=1" +
-//                "&password="+password+"" +
-//                "&product=test_jmu_edu_cn" +
-//                "&time="+currentTimeStamps+"" +
-//                "&unit_id=default";
-//        String sign = RSASignatureToQiye.generateSigature(PRI_KEY, urlParams);
-//        System.out.println(sign);
-//        urlParams+="&sign="+sign;
-//        ResponseEntity<String> obj= restTemplate.postForEntity(QYYX_URL+"/account/createAccount?"+urlParams, null, String.class);
-//        System.out.println(obj);
-        return "obj.getBody()";
     }
 
 
